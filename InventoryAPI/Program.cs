@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-var port=Environment.GetEnvironmentVariable("port") ??"8080" ;
-builder.WebHost.UseUrls($"http://*:{port}");
+var port = Environment.GetEnvironmentVariable("port") ?? "443";
+builder.WebHost.UseUrls($"https://*:{port}");
+
+//var port=Environment.GetEnvironmentVariable("port") ??"8080" ;
+//builder.WebHost.UseUrls($"http://*:{port}");
 // 🔹 إضافة CORS للسماح للـ React بالاتصال بالـ API
 builder.Services.AddCors(options =>
 {
@@ -57,7 +60,7 @@ app.UseCors("AllowAll");
 
 // 🔹 تشغيل Middleware الأساسي
 app.UseHttpsRedirection();
-app.UseHealthChecks("/health");
+//app.UseHealthChecks("/health");
 app.UseAuthorization();
 app.MapControllers();
 

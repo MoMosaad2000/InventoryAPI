@@ -1,8 +1,0 @@
-[build]
-builder="dockerfile"
-dockerfilepath="C:\Users\User\source\repos\InventoryAPI\InventoryAPI\Dockerfile"
-
-[deploy]
-startCommand="./InventoryApi.dll"
-restartPolicyType="always"
-healthcheckPath="health"
