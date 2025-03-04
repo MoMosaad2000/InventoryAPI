@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 var port = Environment.GetEnvironmentVariable("port") ?? "443";
 builder.WebHost.UseUrls($"https://*:{port}");
-
+builder.Services.AddHealthChecks();
 //var port=Environment.GetEnvironmentVariable("port") ??"8080" ;
 //builder.WebHost.UseUrls($"http://*:{port}");
 // 🔹 إضافة CORS للسماح للـ React بالاتصال بالـ API
@@ -50,9 +50,9 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // 🔹 تفعيل Swagger فقط في بيئة التطوير
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseHealthChecks("./health");
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 // 🔹 تفعيل CORS قبل Middleware الخاص بـ Authorization
