@@ -14,8 +14,12 @@ namespace InventoryAPI.Models
         public string? WarehouseKeeperName { get; set; }
         public string? Notes { get; set; }
 
+        // خاصية أمر التشغيل الجديدة
+        public string? OperatingOrder { get; set; } = "";
+
         public List<StockInVoucherItem> Items { get; set; } = new List<StockInVoucherItem>();
     }
+
     public class StockInVoucherItem
     {
         [Key]
@@ -56,5 +60,8 @@ namespace InventoryAPI.Models
 
         // يتم احتساب التكلفة الإجمالية وفقاً للصيغة التالية:
         public decimal TotalCost => (Quantity * Price) + (Quantity * Price * Tax / 100) - Discount;
+
+        // خاصية كود اللون الجديدة
+        public string? ColorCode { get; set; } = "";
     }
 }

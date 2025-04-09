@@ -59,14 +59,12 @@ namespace InventoryAPI.Controllers
                 return BadRequest(new { message = "⚠️ بيانات السند غير مكتملة!" });
             }
 
-            // إزالة الكائنات الملاحيّة من البنود لتفادي مشاكل التتبع
+            // لا نقوم بإزالة الحقول الجديدة؛ فقط إزالة الكائنات الملاحيّة غير الضرورية:
             foreach (var item in stockTransfer.Items)
             {
                 item.Product = null;
                 item.Warehouse = null;
-                // ربط البند بالسند الرئيسي
                 item.StockTransfer = stockTransfer;
-                // تعيين WarehouseId لكل بند إلى FromWarehouseId (أو حسب المنطق الذي تريده)
                 item.WarehouseId = stockTransfer.FromWarehouseId;
             }
 
@@ -78,6 +76,7 @@ namespace InventoryAPI.Controllers
                     return BadRequest("لا يمكن التحويل لنفس المستودع");
                 }
 
+                // لكل بند، تحقق من الكميات وتحديث المخزون
                 foreach (var item in stockTransfer.Items)
                 {
                     if (item.Quantity <= 0)
@@ -94,7 +93,6 @@ namespace InventoryAPI.Controllers
                     }
 
                     fromWarehouseStock.Quantity -= item.Quantity;
-                    // لا حاجة لاستدعاء Update لأن الكيان متتبع
 
                     var toWarehouseStock = await _context.WarehouseStocks
                         .FirstOrDefaultAsync(ws => ws.WarehouseId == stockTransfer.ToWarehouseId && ws.ProductId == item.ProductId);
@@ -133,6 +131,98 @@ namespace InventoryAPI.Controllers
             }
         }
 
+        // GET: api/StockTransfer/next-id
+        [HttpGet("next-id")]
+        public async Task<ActionResult<int>> GetNextStockTransferId()
+        {
+            // إن لم يوجد أي سجل في الجدول، فليكن الرقم 1
+            bool isEmpty = !await _context.StockTransfers.AnyAsync();
+            if (isEmpty)
+            {
+                return 1;
+            }
+
+            // خلاف ذلك، نعتمد على عدد السجلات
+            int count = await _context.StockTransfers.CountAsync();
+            return count + 1;
+        }
+
+        // PUT: api/StockTransfer/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateStockTransfer(int id, [FromBody] StockTransfer stockTransfer)
+        {
+            if (id != stockTransfer.Id)
+            {
+                return BadRequest("الرقم غير متطابق مع السند المحدد.");
+            }
+
+            var existingStockTransfer = await _context.StockTransfers
+                .Include(st => st.Items)
+                .FirstOrDefaultAsync(st => st.Id == id);
+
+            if (existingStockTransfer == null)
+            {
+                return NotFound($"لا يوجد تحويل مخزني بالرقم {id}");
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                if (stockTransfer.FromWarehouseId == stockTransfer.ToWarehouseId)
+                {
+                    return BadRequest("لا يمكن التحويل لنفس المستودع");
+                }
+
+                // تحديث السجلات المرتبطة في stocktransferitems
+                foreach (var item in stockTransfer.Items)
+                {
+                    item.StockTransferId = id; // تأكد من تحديث StockTransferId
+                }
+
+                _context.StockTransfers.Update(stockTransfer);
+
+                // التحقق من الكميات في المستودعات وتحديثها
+                foreach (var item in stockTransfer.Items)
+                {
+                    var fromWarehouseStock = await _context.WarehouseStocks
+                        .FirstOrDefaultAsync(ws => ws.WarehouseId == stockTransfer.FromWarehouseId && ws.ProductId == item.ProductId);
+
+                    if (fromWarehouseStock == null || fromWarehouseStock.Quantity < item.Quantity)
+                    {
+                        return BadRequest($"الكمية في المستودع المصدر غير كافية للمنتج {item.ProductId}");
+                    }
+
+                    fromWarehouseStock.Quantity -= item.Quantity;
+
+                    var toWarehouseStock = await _context.WarehouseStocks
+                        .FirstOrDefaultAsync(ws => ws.WarehouseId == stockTransfer.ToWarehouseId && ws.ProductId == item.ProductId);
+
+                    if (toWarehouseStock != null)
+                    {
+                        toWarehouseStock.Quantity += item.Quantity;
+                    }
+                    else
+                    {
+                        _context.WarehouseStocks.Add(new WarehouseStock
+                        {
+                            WarehouseId = stockTransfer.ToWarehouseId,
+                            ProductId = item.ProductId,
+                            Quantity = item.Quantity
+                        });
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(stockTransfer);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500, $"حدث خطأ داخلي: {ex.Message}");
+            }
+        }
 
         // DELETE: api/StockTransfer/{id}
         [HttpDelete("{id}")]
@@ -144,13 +234,17 @@ namespace InventoryAPI.Controllers
 
             if (stockTransfer == null)
             {
-                return NotFound();
+                return NotFound($"لا يوجد تحويل مخزني بالرقم {id}");
             }
 
+            // حذف العناصر المرتبطة
             _context.StockTransferItems.RemoveRange(stockTransfer.Items);
+
+            // حذف السند نفسه
             _context.StockTransfers.Remove(stockTransfer);
 
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
     }

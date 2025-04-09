@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-var port = Environment.GetEnvironmentVariable("port") ?? "443";
+var port = Environment.GetEnvironmentVariable("port") ?? "8080";
 builder.WebHost.UseUrls($"https://*:{port}");
 builder.Services.AddHealthChecks();
 //var port=Environment.GetEnvironmentVariable("port") ??"8080" ;
@@ -50,7 +50,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // 🔹 تفعيل Swagger فقط في بيئة التطوير
-app.UseHealthChecks("./health");
+app.UseHealthChecks("/health");
 app.UseSwagger();
 app.UseSwaggerUI();
 

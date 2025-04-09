@@ -3,6 +3,7 @@ using System;
 using InventoryAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryAPI.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    partial class InventoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250318131528_AddColorCodeToProduct")]
+    partial class AddColorCodeToProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,9 +162,6 @@ namespace InventoryAPI.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("OperatingOrder")
-                        .HasColumnType("longtext");
-
                     b.Property<int?>("SupplierId")
                         .HasColumnType("int");
 
@@ -183,9 +183,6 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<string>("ColorCode")
-                        .HasColumnType("longtext");
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(65,30)");
@@ -236,9 +233,6 @@ namespace InventoryAPI.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("OperatingOrder")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("TransferDate")
                         .HasColumnType("datetime(6)");
 
@@ -257,9 +251,6 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<string>("ColorCode")
-                        .HasColumnType("longtext");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -310,9 +301,6 @@ namespace InventoryAPI.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("OperatingOrder")
-                        .HasColumnType("longtext");
-
                     b.Property<int>("ToWarehouseId")
                         .HasColumnType("int");
 
@@ -332,9 +320,6 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    b.Property<string>("ColorCode")
-                        .HasColumnType("longtext");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
