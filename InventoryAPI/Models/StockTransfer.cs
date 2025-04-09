@@ -7,6 +7,7 @@
         public int ToWarehouseId { get; set; }
         public string? WarehouseKeeperName { get; set; }
         public DateTime TransferDate { get; set; } = DateTime.UtcNow;
+        public string? OperatingOrder { get; set; }  // أمر التشغيل الجديد
         public string? Notes { get; set; }
         public List<StockTransferItem> Items { get; set; } = new List<StockTransferItem>();
     }
@@ -22,6 +23,7 @@
         public Warehouse? Warehouse { get; set; }
         public string Unit { get; set; } = "حبة";
         public int Quantity { get; set; }
+        public string? ColorCode { get; set; }  // خاصية لون الصنف
         public decimal Price { get; set; }
         public decimal TotalCost => Quantity * Price;
     }

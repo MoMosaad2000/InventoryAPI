@@ -31,7 +31,52 @@ namespace InventoryAPI.Controllers
                 .Include(v => v.Customer)
                 .ToListAsync();
 
-            return Ok(vouchers);
+            // مثال تسطيح البيانات
+            var result = vouchers.Select(v => new
+            {
+                v.Id,
+                v.TransferDate,
+                v.CustomerId,
+                Customer = v.Customer == null ? null : new
+                {
+                    v.Customer.Id,
+                    v.Customer.Name
+                },
+                v.WarehouseKeeperName,
+                v.OperatingOrder, // ✅
+                v.Notes,
+                Items = v.Items.Select(i => new
+                {
+                    i.Id,
+                    i.ProductId,
+                    Product = i.Product == null ? null : new
+                    {
+                        i.Product.Id,
+                        i.Product.Name,
+                        i.Product.Code,
+                        i.Product.Unit
+                    },
+                    i.WarehouseId,
+                    Warehouse = i.Warehouse == null ? null : new
+                    {
+                        i.Warehouse.Id,
+                        i.Warehouse.Name
+                    },
+                    i.CustomerId,
+                    Customer = i.Customer == null ? null : new
+                    {
+                        i.Customer.Id,
+                        i.Customer.Name
+                    },
+                    i.Quantity,
+                    i.Price,
+                    i.Tax,
+                    i.Discount,
+                    i.ColorCode // ✅
+                })
+            });
+
+            return Ok(result);
         }
 
         // إضافة سند صرف جديد
@@ -52,17 +97,16 @@ namespace InventoryAPI.Controllers
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // التحقق من وجود العميل في قاعدة البيانات
+                // التحقق من وجود العميل
                 var customer = await _context.Customers
                     .AsNoTracking()
                     .FirstOrDefaultAsync(c => c.Id == voucher.CustomerId);
-
                 if (customer == null)
                 {
                     return NotFound(new { message = $"⚠️ العميل ذو المعرف {voucher.CustomerId} غير موجود." });
                 }
 
-                // التحقق من كل بند في السند
+                // التحقق من كل بند
                 foreach (var item in voucher.Items)
                 {
                     if (item.Quantity <= 0)
@@ -73,7 +117,6 @@ namespace InventoryAPI.Controllers
                     var product = await _context.Products
                         .AsNoTracking()
                         .FirstOrDefaultAsync(p => p.Id == item.ProductId);
-
                     if (product == null)
                     {
                         return NotFound(new { message = $"⚠️ المنتج ذو المعرف {item.ProductId} غير موجود." });
@@ -82,7 +125,6 @@ namespace InventoryAPI.Controllers
                     var warehouse = await _context.Warehouses
                         .AsNoTracking()
                         .FirstOrDefaultAsync(w => w.Id == item.WarehouseId);
-
                     if (warehouse == null)
                     {
                         return NotFound(new { message = $"⚠️ المستودع ذو المعرف {item.WarehouseId} غير موجود." });
@@ -90,13 +132,9 @@ namespace InventoryAPI.Controllers
 
                     var warehouseStock = await _context.WarehouseStocks
                         .FirstOrDefaultAsync(ws => ws.WarehouseId == item.WarehouseId && ws.ProductId == item.ProductId);
-
                     if (warehouseStock == null || warehouseStock.Quantity < item.Quantity)
                     {
-                        return BadRequest(new
-                        {
-                            message = $"⚠️ الكمية المطلوبة غير متوفرة! الكمية المتاحة: {warehouseStock?.Quantity ?? 0}"
-                        });
+                        return BadRequest(new { message = $"⚠️ الكمية المطلوبة غير متوفرة! الكمية المتاحة: {warehouseStock?.Quantity ?? 0}" });
                     }
 
                     // إنقاص الكمية من المخزن
@@ -105,9 +143,10 @@ namespace InventoryAPI.Controllers
                     // تعيين نفس العميل على البند
                     item.CustomerId = voucher.CustomerId;
 
-                    // تعطيل الكائنات الملاحية
+                    // لا نقوم بحذف الحقول الجديدة (OperatingOrder, Notes, ColorCode)
+                    // فقط حذف الكائنات الملاحيّة لتفادي مشاكل EF
                     item.Product = null;
-                    item.Warehouse = null!;
+                    item.Warehouse = null;
                     item.StockOutVoucher = voucher;
                 }
 
@@ -115,7 +154,6 @@ namespace InventoryAPI.Controllers
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                // إرجاع السند الذي تم إنشاؤه
                 return CreatedAtAction(nameof(GetStockOutVoucherById), new { id = voucher.Id }, voucher);
             }
             catch (Exception ex)
@@ -126,27 +164,25 @@ namespace InventoryAPI.Controllers
                 {
                     errorMessage += $" - InnerException: {ex.InnerException.Message}";
                 }
-
                 return StatusCode(500, new { message = errorMessage });
             }
         }
 
+
         // جلب رقم السند التالي
+        // GET: api/StockOutVoucher/next-id
         [HttpGet("next-id")]
         public async Task<ActionResult<int>> GetNextStockOutVoucherId()
         {
-            // إذا لم يكن هناك أي سندات في الجدول، نعيد 1
+            // إذا كان الجدول فارغًا، نُعيد 1
             bool isEmpty = !await _context.StockOutVouchers.AnyAsync();
             if (isEmpty)
             {
                 return Ok(1);
             }
-
-            // خلاف ذلك، نعيد أعلى رقم سند + 1
-            int maxId = await _context.StockOutVouchers.MaxAsync(v => v.Id);
-            int nextId = maxId + 1;
-
-            return Ok(nextId);
+            // بدلاً من استخدام MaxAsync (الذي يحتفظ بالقيمة السابقة حتى لو تم حذف السجلات)
+            int count = await _context.StockOutVouchers.CountAsync();
+            return Ok(count + 1);
         }
 
 
@@ -185,9 +221,7 @@ namespace InventoryAPI.Controllers
                 return NotFound();
             }
 
-            // حذف البنود المرتبطة بالسند
             _context.StockOutVoucherItems.RemoveRange(voucher.Items);
-            // حذف السند نفسه
             _context.StockOutVouchers.Remove(voucher);
 
             await _context.SaveChangesAsync();

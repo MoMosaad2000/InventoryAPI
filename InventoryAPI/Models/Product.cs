@@ -10,6 +10,7 @@ namespace InventoryAPI.Models
         public string? Description { get; set; }
         public string Unit { get; set; } = "حبة";
         public int SubCategoryId { get; set; }
+        public string? ColorCode { get; set; }
         public int WarehouseId { get; set; }
         public int Quantity { get; set; } = 0;
         public SubCategory? SubCategory { get; set; }

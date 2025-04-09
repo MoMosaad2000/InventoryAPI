@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{444E38B8-7902-4A99-96E8-DE9547A81F7D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		railway.toml = railway.toml
 	EndProjectSection
 EndProject
 Global

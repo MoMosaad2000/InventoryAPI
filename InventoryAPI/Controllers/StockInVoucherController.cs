@@ -2,7 +2,6 @@
 using InventoryAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace InventoryAPI.Controllers
 {
@@ -16,11 +15,11 @@ namespace InventoryAPI.Controllers
         {
             _context = context;
         }
+
         // GET: api/StockInVoucher
         [HttpGet]
         public async Task<IActionResult> GetStockInVouchers()
         {
-            // جلب السندات مع العلاقات
             var vouchers = await _context.StockInVouchers
                 .AsNoTracking()
                 .Include(v => v.Items).ThenInclude(i => i.Product)
@@ -28,12 +27,13 @@ namespace InventoryAPI.Controllers
                 .Include(v => v.Items).ThenInclude(i => i.Warehouse)
                 .ToListAsync();
 
-            // نقوم بتسطيح البيانات حتى لا تُعيد مرجعيات $id
+            // تسطيح البيانات مع تضمين الخاصيتين الجديدتين
             var result = vouchers.Select(v => new
             {
                 v.Id,
                 v.TransferDate,
                 v.WarehouseKeeperName,
+                v.OperatingOrder,   // عرض أمر التشغيل
                 v.Notes,
                 Items = v.Items.Select(i => new
                 {
@@ -62,6 +62,7 @@ namespace InventoryAPI.Controllers
                     i.Price,
                     i.Tax,
                     i.Discount,
+                    i.ColorCode,       // عرض كود اللون
                     i.TotalCost
                 })
             });
@@ -73,7 +74,7 @@ namespace InventoryAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<StockInVoucher>> CreateStockInVoucher([FromBody] StockInVoucher voucher)
         {
-            if (voucher == null || voucher.Items == null || voucher.Items.Count == 0)
+            if (voucher == null || voucher.Items == null || !voucher.Items.Any())
             {
                 return BadRequest(new { message = "⚠️ بيانات السند غير مكتملة!" });
             }
@@ -81,9 +82,6 @@ namespace InventoryAPI.Controllers
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // إذا كان رقم السند يتم توليده تلقائيًا فلا حاجة لتعيينه يدويًا.
-                // مثال: voucher.Id = (await _context.StockInVouchers.MaxAsync(s => (int?)s.Id) ?? 0) + 1;
-
                 foreach (var item in voucher.Items)
                 {
                     if (item.Quantity <= 0)
@@ -91,7 +89,6 @@ namespace InventoryAPI.Controllers
                         return BadRequest($"⚠️ البيانات غير صحيحة للمنتج {item.ProductId}");
                     }
 
-                    // التأكد من وجود الكيانات المطلوبة
                     var product = await _context.Products.FindAsync(item.ProductId);
                     if (product == null)
                         return BadRequest($"⚠️ المنتج ذو المعرف {item.ProductId} غير موجود.");
@@ -109,7 +106,6 @@ namespace InventoryAPI.Controllers
                     item.Tax = 0;
                     item.Discount = 0;
 
-                    // تحديث كمية المخزون في المستودع
                     var warehouseStock = await _context.WarehouseStocks
                         .FirstOrDefaultAsync(ws => ws.WarehouseId == item.WarehouseId && ws.ProductId == item.ProductId);
 
@@ -125,7 +121,6 @@ namespace InventoryAPI.Controllers
                         });
                     }
 
-                    // إسناد الكائنات الملاحيّة (Navigation Properties) على جانب الخادم
                     item.Product = product;
                     item.Supplier = supplier;
                     item.Warehouse = warehouse;
@@ -144,6 +139,7 @@ namespace InventoryAPI.Controllers
                 return StatusCode(500, $"حدث خطأ داخلي: {ex.Message}");
             }
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStockInVoucherById(int id)
         {
@@ -157,12 +153,12 @@ namespace InventoryAPI.Controllers
             if (voucher == null)
                 return NotFound();
 
-            // نفس تسطيح البيانات
             var result = new
             {
                 voucher.Id,
                 voucher.TransferDate,
                 voucher.WarehouseKeeperName,
+                voucher.OperatingOrder,
                 voucher.Notes,
                 Items = voucher.Items.Select(i => new
                 {
@@ -191,6 +187,7 @@ namespace InventoryAPI.Controllers
                     i.Price,
                     i.Tax,
                     i.Discount,
+                    i.ColorCode,  // عرض كود اللون
                     i.TotalCost
                 })
             };
@@ -201,13 +198,14 @@ namespace InventoryAPI.Controllers
         [HttpGet("next-id")]
         public async Task<ActionResult<int>> GetNextVoucherId()
         {
-            int nextId = await _context.StockInVouchers
-                .OrderByDescending(s => s.Id)
-                .Select(s => s.Id)
-                .FirstOrDefaultAsync() + 1;
+            // احسب عدد السجلات الحالية في الجدول
+            var count = await _context.StockInVouchers.CountAsync();
+            // رقم السند التالي هو (عدد السجلات + 1)
+            int nextLogicalId = count + 1;
 
-            return Ok(nextId);
+            return Ok(nextLogicalId);
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStockInVoucher(int id)
         {
@@ -220,14 +218,11 @@ namespace InventoryAPI.Controllers
                 return NotFound();
             }
 
-            // حذف البنود الخاصة بالسند أولاً
             _context.StockInVoucherItems.RemoveRange(voucher.Items);
-            // ثم حذف السند
             _context.StockInVouchers.Remove(voucher);
 
             await _context.SaveChangesAsync();
-            return NoContent(); // 204 No Content
+            return NoContent();
         }
-
     }
 }
