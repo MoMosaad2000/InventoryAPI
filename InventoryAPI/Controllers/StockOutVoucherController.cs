@@ -1,10 +1,12 @@
 ﻿using InventoryAPI.Data;
 using InventoryAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StockOutVoucherController : ControllerBase
@@ -72,7 +74,8 @@ namespace InventoryAPI.Controllers
                     i.Price,
                     i.Tax,
                     i.Discount,
-                    i.ColorCode // ✅
+                    i.ColorCode, // ✅
+                    i.Unit
                 })
             });
 
@@ -80,92 +83,48 @@ namespace InventoryAPI.Controllers
         }
 
         // إضافة سند صرف جديد
+        // ✅ تعديل الكنترولر لقبول بيانات الـ productId سواء كانت كـ int أو object
         [HttpPost]
-        public async Task<ActionResult<StockOutVoucher>> CreateStockOutVoucher([FromBody] StockOutVoucher voucher)
+        public async Task<IActionResult> CreateStockOutVoucher([FromBody] StockOutVoucher voucher)
         {
             if (voucher == null || voucher.Items == null || !voucher.Items.Any())
             {
-                return BadRequest(new { message = "⚠️ بيانات السند غير مكتملة!" });
+                return BadRequest(new { message = "⚠️ بيانات السند غير مكتملة!", voucher });
             }
 
-            // إذا كان CustomerId في السند = 0، نأخذه من أول بند
-            if (voucher.CustomerId == 0)
+            foreach (var item in voucher.Items)
             {
-                voucher.CustomerId = voucher.Items.First().CustomerId;
+                if (item.ProductId == 0)
+                {
+                    return BadRequest(new { message = "⚠️ المنتج غير معرف بشكل صحيح!", productId = item.ProductId });
+                }
             }
 
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
+            var stockOutVoucher = new StockOutVoucher
             {
-                // التحقق من وجود العميل
-                var customer = await _context.Customers
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(c => c.Id == voucher.CustomerId);
-                if (customer == null)
+                TransferDate = voucher.TransferDate,
+                WarehouseKeeperName = voucher.WarehouseKeeperName,
+                OperatingOrder = voucher.OperatingOrder,
+                Notes = voucher.Notes,
+                CustomerId = voucher.CustomerId,
+                Items = voucher.Items.Select(i => new StockOutVoucherItem
                 {
-                    return NotFound(new { message = $"⚠️ العميل ذو المعرف {voucher.CustomerId} غير موجود." });
-                }
+                    ProductId = i.ProductId,
+                    CustomerId = voucher.CustomerId,
+                    WarehouseId = i.WarehouseId,
+                    Quantity = i.Quantity,
+                    Price = i.Price,
+                    Unit = i.Unit,
+                    Tax = i.Tax,
+                    Discount = i.Discount,
+                    ColorCode = i.ColorCode
+                }).ToList()
+            };
 
-                // التحقق من كل بند
-                foreach (var item in voucher.Items)
-                {
-                    if (item.Quantity <= 0)
-                    {
-                        return BadRequest(new { message = $"⚠️ البيانات غير صحيحة للمنتج {item.ProductId}" });
-                    }
+            _context.StockOutVouchers.Add(stockOutVoucher);
+            await _context.SaveChangesAsync();
 
-                    var product = await _context.Products
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync(p => p.Id == item.ProductId);
-                    if (product == null)
-                    {
-                        return NotFound(new { message = $"⚠️ المنتج ذو المعرف {item.ProductId} غير موجود." });
-                    }
-
-                    var warehouse = await _context.Warehouses
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync(w => w.Id == item.WarehouseId);
-                    if (warehouse == null)
-                    {
-                        return NotFound(new { message = $"⚠️ المستودع ذو المعرف {item.WarehouseId} غير موجود." });
-                    }
-
-                    var warehouseStock = await _context.WarehouseStocks
-                        .FirstOrDefaultAsync(ws => ws.WarehouseId == item.WarehouseId && ws.ProductId == item.ProductId);
-                    if (warehouseStock == null || warehouseStock.Quantity < item.Quantity)
-                    {
-                        return BadRequest(new { message = $"⚠️ الكمية المطلوبة غير متوفرة! الكمية المتاحة: {warehouseStock?.Quantity ?? 0}" });
-                    }
-
-                    // إنقاص الكمية من المخزن
-                    warehouseStock.Quantity -= item.Quantity;
-
-                    // تعيين نفس العميل على البند
-                    item.CustomerId = voucher.CustomerId;
-
-                    // لا نقوم بحذف الحقول الجديدة (OperatingOrder, Notes, ColorCode)
-                    // فقط حذف الكائنات الملاحيّة لتفادي مشاكل EF
-                    item.Product = null;
-                    item.Warehouse = null;
-                    item.StockOutVoucher = voucher;
-                }
-
-                _context.StockOutVouchers.Add(voucher);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return CreatedAtAction(nameof(GetStockOutVoucherById), new { id = voucher.Id }, voucher);
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                var errorMessage = $"❌ حدث خطأ داخلي: {ex.Message}";
-                if (ex.InnerException != null)
-                {
-                    errorMessage += $" - InnerException: {ex.InnerException.Message}";
-                }
-                return StatusCode(500, new { message = errorMessage });
-            }
+            return CreatedAtAction(nameof(GetStockOutVoucherById), new { id = stockOutVoucher.Id }, stockOutVoucher);
         }
 
 

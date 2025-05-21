@@ -40,17 +40,53 @@ namespace InventoryAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("ContactInfo")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DeliveryLocation")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("TaxNumber")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("Customers", (string)null);
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.InvoiceAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PurchaseInvoiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PurchaseInvoiceId");
+
+                    b.ToTable("InvoiceAttachments");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.Product", b =>
@@ -67,6 +103,9 @@ namespace InventoryAPI.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
@@ -141,6 +180,10 @@ namespace InventoryAPI.Migrations
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
@@ -148,6 +191,100 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("PurchaseInvoiceId");
 
                     b.ToTable("PurchaseInvoiceItems");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PaymentTerms")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RepresentativeName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("TotalWithTax")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("SalesOrder");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Drawing")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OrderCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OrderName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SalesOrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SalesOrderId");
+
+                    b.ToTable("SalesOrderItem");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.StockInVoucher", b =>
@@ -207,6 +344,10 @@ namespace InventoryAPI.Migrations
 
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("WarehouseId")
                         .HasColumnType("int");
@@ -281,6 +422,10 @@ namespace InventoryAPI.Migrations
 
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("WarehouseId")
                         .HasColumnType("int");
@@ -400,6 +545,10 @@ namespace InventoryAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("TaxNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("Suppliers");
@@ -442,6 +591,17 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("WarehouseStocks");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.InvoiceAttachment", b =>
+                {
+                    b.HasOne("InventoryAPI.Models.PurchaseInvoice", "PurchaseInvoice")
+                        .WithMany("Attachments")
+                        .HasForeignKey("PurchaseInvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PurchaseInvoice");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.Product", b =>
@@ -491,6 +651,28 @@ namespace InventoryAPI.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("PurchaseInvoice");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrder", b =>
+                {
+                    b.HasOne("InventoryAPI.Models.Customer", "Customer")
+                        .WithMany("SalesOrders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrderItem", b =>
+                {
+                    b.HasOne("InventoryAPI.Models.SalesOrder", "SalesOrder")
+                        .WithMany("Items")
+                        .HasForeignKey("SalesOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SalesOrder");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.StockInVoucher", b =>
@@ -645,10 +827,19 @@ namespace InventoryAPI.Migrations
 
             modelBuilder.Entity("InventoryAPI.Models.Customer", b =>
                 {
+                    b.Navigation("SalesOrders");
+
                     b.Navigation("StockOutVouchers");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.PurchaseInvoice", b =>
+                {
+                    b.Navigation("Attachments");
+
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrder", b =>
                 {
                     b.Navigation("Items");
                 });

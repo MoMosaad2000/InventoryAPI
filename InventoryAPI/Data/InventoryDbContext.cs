@@ -90,6 +90,10 @@ namespace InventoryAPI.Data
         public DbSet<StockOutVoucherItem> StockOutVoucherItems { get; set; }
         public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
         public DbSet<PurchaseInvoiceItem> PurchaseInvoiceItems { get; set; }
+        public DbSet<InvoiceAttachment> InvoiceAttachments { get; set; }
+        public DbSet<SalesOrder> SalesOrder { get; set; }
+        public DbSet<SalesOrderItem> SalesOrderItem { get; set; }
+
 
         // لا حاجة لإضافة StockReportItem هنا لأنه ليس جزءًا من قاعدة البيانات
         // public DbSet<StockReportItem> StockReportItems { get; set; }

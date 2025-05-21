@@ -1,10 +1,12 @@
 ﻿using InventoryAPI.Data;
 using InventoryAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StockInVoucherController : ControllerBase
@@ -63,7 +65,8 @@ namespace InventoryAPI.Controllers
                     i.Tax,
                     i.Discount,
                     i.ColorCode,       // عرض كود اللون
-                    i.TotalCost
+                    i.TotalCost,
+                    i.Unit
                 })
             });
 
@@ -188,7 +191,8 @@ namespace InventoryAPI.Controllers
                     i.Tax,
                     i.Discount,
                     i.ColorCode,  // عرض كود اللون
-                    i.TotalCost
+                    i.TotalCost,
+                    i.Unit
                 })
             };
 

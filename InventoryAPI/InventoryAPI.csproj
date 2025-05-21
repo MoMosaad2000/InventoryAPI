@@ -7,6 +7,8 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>929d945f-e004-4ce0-8e31-358fc0839231</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+      <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
    
   </PropertyGroup>
 
@@ -27,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
+     
   </ItemGroup>
 
 </Project>
