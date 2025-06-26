@@ -7,6 +7,8 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>929d945f-e004-4ce0-8e31-358fc0839231</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+      <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
    
   </PropertyGroup>
 
@@ -21,12 +23,14 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
+     
   </ItemGroup>
 
 </Project>

@@ -31,7 +31,7 @@ namespace InventoryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.Customer", b =>
@@ -40,17 +40,234 @@ namespace InventoryAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("ContactInfo")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DeliveryLocation")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("TaxNumber")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.FinalProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("MainCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("ProductionDurationHours")
+                        .HasColumnType("double");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FinalProducts");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.FinalProductComponent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("FinalProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FinalProductId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("double");
+
+                    b.Property<int>("RawMaterialId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FinalProductId");
+
+                    b.HasIndex("FinalProductId1");
+
+                    b.ToTable("FinalProductComponents");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.IndirectCost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("AccountCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("AllocationBasis")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("FinalProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FinalProductId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MainClassification")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("UnitCost")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FinalProductId");
+
+                    b.HasIndex("FinalProductId1");
+
+                    b.ToTable("IndirectCosts");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.InvoiceAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PurchaseInvoiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PurchaseInvoiceId");
+
+                    b.ToTable("InvoiceAttachments");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.OperationOrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("OperationOrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("ProductionDurationHours")
+                        .HasColumnType("double");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperationOrderId");
+
+                    b.ToTable("OperationOrderItems");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.OperationOrders", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationOrders");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.Product", b =>
@@ -67,6 +284,9 @@ namespace InventoryAPI.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
@@ -141,6 +361,10 @@ namespace InventoryAPI.Migrations
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
@@ -148,6 +372,105 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("PurchaseInvoiceId");
 
                     b.ToTable("PurchaseInvoiceItems");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PaymentTerms")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RepresentativeName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("TotalWithTax")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("SalesOrder");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Drawing")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OrderCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OrderName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SalesOrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SalesOrderId1")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SalesOrderId");
+
+                    b.HasIndex("SalesOrderId1");
+
+                    b.ToTable("SalesOrderItem");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.StockInVoucher", b =>
@@ -202,11 +525,21 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("StockInVoucherId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("StockInVoucherId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockInVoucherId2")
+                        .HasColumnType("int");
+
                     b.Property<int>("SupplierId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("WarehouseId")
                         .HasColumnType("int");
@@ -216,6 +549,8 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("ProductId");
 
                     b.HasIndex("StockInVoucherId");
+
+                    b.HasIndex("StockInVoucherId1");
 
                     b.HasIndex("SupplierId");
 
@@ -279,8 +614,18 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("StockOutVoucherId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("StockOutVoucherId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockOutVoucherId2")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("WarehouseId")
                         .HasColumnType("int");
@@ -292,6 +637,8 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("ProductId");
 
                     b.HasIndex("StockOutVoucherId");
+
+                    b.HasIndex("StockOutVoucherId1");
 
                     b.HasIndex("WarehouseId");
 
@@ -348,6 +695,9 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("StockTransferId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("StockTransferId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -360,6 +710,8 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("ProductId");
 
                     b.HasIndex("StockTransferId");
+
+                    b.HasIndex("StockTransferId1");
 
                     b.HasIndex("WarehouseId");
 
@@ -397,6 +749,10 @@ namespace InventoryAPI.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TaxNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -442,6 +798,56 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("WarehouseStocks");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.FinalProductComponent", b =>
+                {
+                    b.HasOne("InventoryAPI.Models.FinalProduct", null)
+                        .WithMany("Components")
+                        .HasForeignKey("FinalProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryAPI.Models.FinalProduct", "FinalProduct")
+                        .WithMany()
+                        .HasForeignKey("FinalProductId1");
+
+                    b.Navigation("FinalProduct");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.IndirectCost", b =>
+                {
+                    b.HasOne("InventoryAPI.Models.FinalProduct", null)
+                        .WithMany("IndirectCosts")
+                        .HasForeignKey("FinalProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryAPI.Models.FinalProduct", "FinalProduct")
+                        .WithMany()
+                        .HasForeignKey("FinalProductId1");
+
+                    b.Navigation("FinalProduct");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.InvoiceAttachment", b =>
+                {
+                    b.HasOne("InventoryAPI.Models.PurchaseInvoice", "PurchaseInvoice")
+                        .WithMany("Attachments")
+                        .HasForeignKey("PurchaseInvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PurchaseInvoice");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.OperationOrderItem", b =>
+                {
+                    b.HasOne("InventoryAPI.Models.OperationOrders", null)
+                        .WithMany("Items")
+                        .HasForeignKey("OperationOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.Product", b =>
@@ -493,6 +899,32 @@ namespace InventoryAPI.Migrations
                     b.Navigation("PurchaseInvoice");
                 });
 
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrder", b =>
+                {
+                    b.HasOne("InventoryAPI.Models.Customer", "Customer")
+                        .WithMany("SalesOrders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrderItem", b =>
+                {
+                    b.HasOne("InventoryAPI.Models.SalesOrder", null)
+                        .WithMany("Items")
+                        .HasForeignKey("SalesOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryAPI.Models.SalesOrder", "SalesOrder")
+                        .WithMany()
+                        .HasForeignKey("SalesOrderId1");
+
+                    b.Navigation("SalesOrder");
+                });
+
             modelBuilder.Entity("InventoryAPI.Models.StockInVoucher", b =>
                 {
                     b.HasOne("InventoryAPI.Models.Supplier", null)
@@ -505,25 +937,29 @@ namespace InventoryAPI.Migrations
                     b.HasOne("InventoryAPI.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryAPI.Models.StockInVoucher", "StockInVoucher")
+                    b.HasOne("InventoryAPI.Models.StockInVoucher", null)
                         .WithMany("Items")
                         .HasForeignKey("StockInVoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("InventoryAPI.Models.StockInVoucher", "StockInVoucher")
+                        .WithMany()
+                        .HasForeignKey("StockInVoucherId1");
+
                     b.HasOne("InventoryAPI.Models.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("InventoryAPI.Models.Warehouse", "Warehouse")
                         .WithMany()
                         .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -560,11 +996,15 @@ namespace InventoryAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryAPI.Models.StockOutVoucher", "StockOutVoucher")
+                    b.HasOne("InventoryAPI.Models.StockOutVoucher", null)
                         .WithMany("Items")
                         .HasForeignKey("StockOutVoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("InventoryAPI.Models.StockOutVoucher", "StockOutVoucher")
+                        .WithMany()
+                        .HasForeignKey("StockOutVoucherId1");
 
                     b.HasOne("InventoryAPI.Models.Warehouse", "Warehouse")
                         .WithMany()
@@ -589,11 +1029,15 @@ namespace InventoryAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryAPI.Models.StockTransfer", "StockTransfer")
+                    b.HasOne("InventoryAPI.Models.StockTransfer", null)
                         .WithMany("Items")
                         .HasForeignKey("StockTransferId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("InventoryAPI.Models.StockTransfer", "StockTransfer")
+                        .WithMany()
+                        .HasForeignKey("StockTransferId1");
 
                     b.HasOne("InventoryAPI.Models.Warehouse", "Warehouse")
                         .WithMany()
@@ -645,10 +1089,31 @@ namespace InventoryAPI.Migrations
 
             modelBuilder.Entity("InventoryAPI.Models.Customer", b =>
                 {
+                    b.Navigation("SalesOrders");
+
                     b.Navigation("StockOutVouchers");
                 });
 
+            modelBuilder.Entity("InventoryAPI.Models.FinalProduct", b =>
+                {
+                    b.Navigation("Components");
+
+                    b.Navigation("IndirectCosts");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.OperationOrders", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("InventoryAPI.Models.PurchaseInvoice", b =>
+                {
+                    b.Navigation("Attachments");
+
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("InventoryAPI.Models.SalesOrder", b =>
                 {
                     b.Navigation("Items");
                 });

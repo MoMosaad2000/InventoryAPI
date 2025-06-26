@@ -1,67 +1,114 @@
 ﻿using InventoryAPI.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using InventoryAPI.Security; // ✅ تأكد من المسار للمجلد اللي فيه BasicAuthHandler
 using System.Text.Json.Serialization;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+<<<<<<< HEAD:InventoryAPI/Program.cs
+=======
+
+// ✅ إعداد البورت
+>>>>>>> fe47b9e (fix: update components):Program.cs
 var port = Environment.GetEnvironmentVariable("port") ?? "8080";
 builder.WebHost.UseUrls($"https://*:{port}");
+
+// ✅ Health Checks
 builder.Services.AddHealthChecks();
-//var port=Environment.GetEnvironmentVariable("port") ??"8080" ;
-//builder.WebHost.UseUrls($"http://*:{port}");
-// 🔹 إضافة CORS للسماح للـ React بالاتصال بالـ API
+
+// ✅ CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        policyBuilder => policyBuilder
-            .AllowAnyOrigin()   // السماح بأي مصدر (React Frontend)
-            .AllowAnyMethod()   // السماح بأي نوع من الطلبات (GET, POST, PUT, DELETE)
-            .AllowAnyHeader()); // السماح بأي نوع من الهيدر
-});
-
-//هيحل مشكلة الـ Reference Loops اللي بتسبب إرجاع $ref بدل البيانات الأصلية.
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-});
-// 🔹 إعداد JSON لتجاهل الحلقات لتفادي الخطأ
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-
-});
-
-// 🔹 إضافة خدمات التحكم في البيانات
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+    options.AddPolicy("AllowAll", policyBuilder =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        policyBuilder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
+});
 
-// 🔹 إعداد اتصال قاعدة البيانات MySQL
+// ✅ Basic Authentication
+builder.Services.AddAuthentication("BasicAuth")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthHandler>("BasicAuth", null);
+
+// ✅ إعداد JSON Preserve لحل مشكلة $values
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
+
+// ✅ اتصال MySQL
 builder.Services.AddDbContext<InventoryDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-                     new MySqlServerVersion(new Version(8, 0, 41))));
+        new MySqlServerVersion(new Version(8, 0, 41)))
+);
 
-// 🔹 إضافة Swagger لتوثيق الـ API
+// ✅ Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "InventoryAPI", Version = "v1" });
+
+    // ✅ دعم Basic Auth
+    c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "basic",
+        In = ParameterLocation.Header,
+        Description = "أدخل اسم المستخدم وكلمة المرور"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "basic"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 var app = builder.Build();
 
+<<<<<<< HEAD:InventoryAPI/Program.cs
 // 🔹 تفعيل Swagger فقط في بيئة التطوير
 app.UseHealthChecks("/health");
+=======
+// ✅ Swagger UI
+>>>>>>> fe47b9e (fix: update components):Program.cs
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Inventory API V1");
+    c.RoutePrefix = "swagger";
+});
+
+// ✅ Middlewares
+app.UseHealthChecks("/health");
+app.UseStaticFiles();
+// 🛠 تأكد أن مجلد uploads موجود فعليًا
+var uploadsPath = Path.Combine(app.Environment.WebRootPath, "uploads");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
 
 
-// 🔹 تفعيل CORS قبل Middleware الخاص بـ Authorization
 app.UseCors("AllowAll");
-
-// 🔹 تشغيل Middleware الأساسي
 app.UseHttpsRedirection();
-//app.UseHealthChecks("/health");
+
+app.UseAuthentication(); // ضروري قبل Authorization
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

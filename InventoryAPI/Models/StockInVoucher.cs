@@ -54,6 +54,7 @@ namespace InventoryAPI.Models
 
         [Required]
         public decimal Price { get; set; }
+        public string Unit { get; set; } = "حبة";
 
         public decimal Tax { get; set; } = 0;
         public decimal Discount { get; set; } = 0;

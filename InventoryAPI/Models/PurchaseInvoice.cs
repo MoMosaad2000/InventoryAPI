@@ -14,7 +14,7 @@ namespace InventoryAPI.Models
         public Supplier? Supplier { get; set; }
         public DateTime InvoiceDate { get; set; } = DateTime.UtcNow;
         public decimal TotalAmount { get; set; }
-
+        public List<InvoiceAttachment> Attachments { get; set; } = new List<InvoiceAttachment>();// ✅ المرفقات هنا
         public List<PurchaseInvoiceItem> Items { get; set; } = new List<PurchaseInvoiceItem>();
     }
 
@@ -38,10 +38,13 @@ namespace InventoryAPI.Models
         public int Quantity { get; set; }
         [Required]
         public decimal Price { get; set; }
+        public string Unit { get; set; } = "حبة";
 
         public decimal Discount { get; set; } = 0;
         public decimal Tax { get; set; } = 0;
 
         public decimal TotalCost => (Quantity * Price) + (Quantity * Price * Tax / 100) - Discount;
     }
+
+   
 }

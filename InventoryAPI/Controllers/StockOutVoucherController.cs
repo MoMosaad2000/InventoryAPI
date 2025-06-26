@@ -1,10 +1,12 @@
 ﻿using InventoryAPI.Data;
 using InventoryAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StockOutVoucherController : ControllerBase
@@ -72,7 +74,12 @@ namespace InventoryAPI.Controllers
                     i.Price,
                     i.Tax,
                     i.Discount,
+<<<<<<< HEAD:InventoryAPI/Controllers/StockOutVoucherController.cs
                     i.ColorCode // ✅
+=======
+                    i.ColorCode, // ✅
+                    i.Unit
+>>>>>>> fe47b9e (fix: update components):Controllers/StockOutVoucherController.cs
                 })
             });
 
@@ -80,32 +87,53 @@ namespace InventoryAPI.Controllers
         }
 
         // إضافة سند صرف جديد
+        // ✅ تعديل الكنترولر لقبول بيانات الـ productId سواء كانت كـ int أو object
         [HttpPost]
-        public async Task<ActionResult<StockOutVoucher>> CreateStockOutVoucher([FromBody] StockOutVoucher voucher)
+        public async Task<IActionResult> CreateStockOutVoucher([FromBody] StockOutVoucher voucher)
         {
             if (voucher == null || voucher.Items == null || !voucher.Items.Any())
             {
-                return BadRequest(new { message = "⚠️ بيانات السند غير مكتملة!" });
+                return BadRequest(new { message = "⚠️ بيانات السند غير مكتملة!", voucher });
             }
 
-            // إذا كان CustomerId في السند = 0، نأخذه من أول بند
-            if (voucher.CustomerId == 0)
+            foreach (var item in voucher.Items)
             {
-                voucher.CustomerId = voucher.Items.First().CustomerId;
+                if (item.ProductId == 0)
+                {
+                    return BadRequest(new { message = "⚠️ المنتج غير معرف بشكل صحيح!", productId = item.ProductId });
+                }
             }
 
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
+            var stockOutVoucher = new StockOutVoucher
             {
+<<<<<<< HEAD:InventoryAPI/Controllers/StockOutVoucherController.cs
                 // التحقق من وجود العميل
                 var customer = await _context.Customers
                     .AsNoTracking()
                     .FirstOrDefaultAsync(c => c.Id == voucher.CustomerId);
                 if (customer == null)
+=======
+                TransferDate = voucher.TransferDate,
+                WarehouseKeeperName = voucher.WarehouseKeeperName,
+                OperatingOrder = voucher.OperatingOrder,
+                Notes = voucher.Notes,
+                CustomerId = voucher.CustomerId,
+                Items = voucher.Items.Select(i => new StockOutVoucherItem
+>>>>>>> fe47b9e (fix: update components):Controllers/StockOutVoucherController.cs
                 {
-                    return NotFound(new { message = $"⚠️ العميل ذو المعرف {voucher.CustomerId} غير موجود." });
-                }
+                    ProductId = i.ProductId,
+                    CustomerId = voucher.CustomerId,
+                    WarehouseId = i.WarehouseId,
+                    Quantity = i.Quantity,
+                    Price = i.Price,
+                    Unit = i.Unit,
+                    Tax = i.Tax,
+                    Discount = i.Discount,
+                    ColorCode = i.ColorCode
+                }).ToList()
+            };
 
+<<<<<<< HEAD:InventoryAPI/Controllers/StockOutVoucherController.cs
                 // التحقق من كل بند
                 foreach (var item in voucher.Items)
                 {
@@ -166,6 +194,12 @@ namespace InventoryAPI.Controllers
                 }
                 return StatusCode(500, new { message = errorMessage });
             }
+=======
+            _context.StockOutVouchers.Add(stockOutVoucher);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetStockOutVoucherById), new { id = stockOutVoucher.Id }, stockOutVoucher);
+>>>>>>> fe47b9e (fix: update components):Controllers/StockOutVoucherController.cs
         }
 
 

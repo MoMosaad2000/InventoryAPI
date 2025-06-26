@@ -1,38 +1,28 @@
 ﻿using InventoryAPI.Data;
 using InventoryAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace InventoryAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly InventoryDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public ProductsController(InventoryDbContext context)
+        public ProductsController(InventoryDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
-        // ✅ **جلب جميع المنتجات**
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
-        //{
-        //    var products = await _context.Products
-        //        .Include(p => p.SubCategory)
-        //        .Include(p => p.Warehouse)
-        //        .AsNoTracking()
-        //        .ToListAsync();
-
-        //    return Ok(products);
-        //}
-
-        // ✅ **جلب منتج واحد حسب الـ ID**
-        // جلب منتج واحد حسب الـ ID مع بيانات الفئة الفرعية والمستودع (المستودع لن يتم عرضه بفضل [JsonIgnore])
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductResponseDto>> GetProduct(int id)
         {
             var product = await _context.Products
                 .Include(p => p.SubCategory)
@@ -40,15 +30,31 @@ namespace InventoryAPI.Controllers
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
-            {
-                return NotFound(new { message = "المنتج غير موجود" });
-            }
+                return NotFound();
 
-            return Ok(product);
+            var dto = new ProductResponseDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Code = product.Code,
+                Description = product.Description,
+                Unit = product.Unit,
+                ColorCode = product.ColorCode,
+                SubCategoryId = product.SubCategoryId,
+                WarehouseId = product.WarehouseId,
+                Quantity = product.Quantity,
+                ImageUrl = string.IsNullOrEmpty(product.ImagePath)
+                    ? null
+                    : $"{Request.Scheme}://{Request.Host}/{product.ImagePath.Replace("\\", "/")}",
+                SubCategoryName = product.SubCategory?.Name,
+                WarehouseName = product.Warehouse?.Name
+            };
+
+            return Ok(dto);
         }
-        // جلب المنتجات بحسب الفئة والفئة الفرعية
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategoryAndSubCategory(int? categoryId = null, int? subCategoryId = null)
+        public async Task<ActionResult<IEnumerable<ProductResponseDto>>> GetProductsByCategoryAndSubCategory(int? categoryId = null, int? subCategoryId = null)
         {
             var query = _context.Products
                 .Include(p => p.SubCategory)
@@ -66,45 +72,68 @@ namespace InventoryAPI.Controllers
             }
 
             var products = await query.ToListAsync();
-            return Ok(products);
-        }
 
-        // إضافة منتج جديد مع إضافته تلقائيًا للمخزون
-        [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
-        {
-            if (product == null)
+            return Ok(products.Select(product => new ProductResponseDto
             {
-                return BadRequest(new { message = "بيانات المنتج غير صحيحة" });
-            }
-
-            product.Quantity = 0; // تأكيد أن المنتج يبدأ بكمية 0
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            // التأكد من وجود المستودع
-            var warehouse = await _context.Warehouses.FindAsync(product.WarehouseId);
-            if (warehouse == null)
-            {
-                return BadRequest("المستودع غير موجود.");
-            }
-
-            // إضافة المنتج إلى المخزون عند إنشائه
-            var warehouseStock = new WarehouseStock
-            {
-                ProductId = product.Id,
+                Id = product.Id,
+                Name = product.Name,
+                Code = product.Code,
+                Description = product.Description,
+                Unit = product.Unit,
+                ColorCode = product.ColorCode,
+                SubCategoryId = product.SubCategoryId,
                 WarehouseId = product.WarehouseId,
-                Quantity = 0,
-                Product = product
-            };
-
-            _context.WarehouseStocks.Add(warehouseStock);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+                Quantity = product.Quantity,
+                ImageUrl = string.IsNullOrEmpty(product.ImagePath)
+                    ? null
+                    : $"{Request.Scheme}://{Request.Host}/{product.ImagePath.Replace("\\", "/")}",
+                SubCategoryName = product.SubCategory?.Name,
+                WarehouseName = product.Warehouse?.Name
+            }));
         }
 
-        // حذف منتج
+        [HttpPost("upload")]
+        [RequestSizeLimit(50_000_000)]
+        public async Task<IActionResult> UploadProduct([FromForm] ProductUploadDto dto)
+        {
+            try
+            {
+                var newProduct = JsonSerializer.Deserialize<Product>(dto.Product, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (newProduct == null || newProduct.SubCategoryId == 0 || newProduct.WarehouseId == 0)
+                    return BadRequest("⚠️ بيانات المنتج غير مكتملة");
+
+                if (dto.Image != null && dto.Image.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "Uploads");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    var uniqueFileName = $"{Guid.NewGuid()}_{dto.Image.FileName}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await dto.Image.CopyToAsync(stream);
+                    }
+
+                    newProduct.ImagePath = Path.Combine("Uploads", uniqueFileName);
+                }
+
+                newProduct.Quantity = 0;
+                _context.Products.Add(newProduct);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetProduct), new { id = newProduct.Id }, newProduct);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"❌ خطأ أثناء إضافة المنتج: {ex.Message}");
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
@@ -117,4 +146,6 @@ namespace InventoryAPI.Controllers
             return NoContent();
         }
     }
+
+   
 }
