@@ -34,8 +34,9 @@ namespace InventoryAPI.Security
             var password = credentials[1];
 
             // ✅ استخدم بيانات حقيقية أو تحقق من قاعدة بيانات
-            if (username != "admin" || password != "admin")
+            if (username != "Areka@Mosaad25" || password != "35831629m")
                 return Task.FromResult(AuthenticateResult.Fail("Invalid Username or Password"));
+
 
             var claims = new[] { new Claim(ClaimTypes.Name, username) };
             var identity = new ClaimsIdentity(claims, Scheme.Name);
