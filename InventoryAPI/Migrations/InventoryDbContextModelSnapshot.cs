@@ -31,7 +31,7 @@ namespace InventoryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.Customer", b =>
@@ -62,7 +62,7 @@ namespace InventoryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.FinalProduct", b =>
@@ -120,9 +120,6 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("FinalProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FinalProductId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -142,8 +139,6 @@ namespace InventoryAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FinalProductId");
-
-                    b.HasIndex("FinalProductId1");
 
                     b.ToTable("FinalProductComponents");
                 });
@@ -169,9 +164,6 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("FinalProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FinalProductId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("MainClassification")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -182,8 +174,6 @@ namespace InventoryAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FinalProductId");
-
-                    b.HasIndex("FinalProductId1");
 
                     b.ToTable("IndirectCosts");
                 });
@@ -221,6 +211,9 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("OperationOrderId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("OperationOrdersId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProductCode")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -241,9 +234,9 @@ namespace InventoryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OperationOrderId");
+                    b.HasIndex("OperationOrdersId");
 
-                    b.ToTable("OperationOrderItems");
+                    b.ToTable("OperationOrderItem");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.OperationOrders", b =>
@@ -448,9 +441,6 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("SalesOrderId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SalesOrderId1")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(65,30)");
 
@@ -467,8 +457,6 @@ namespace InventoryAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("SalesOrderId");
-
-                    b.HasIndex("SalesOrderId1");
 
                     b.ToTable("SalesOrderItem");
                 });
@@ -525,12 +513,6 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("StockInVoucherId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StockInVoucherId1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StockInVoucherId2")
-                        .HasColumnType("int");
-
                     b.Property<int>("SupplierId")
                         .HasColumnType("int");
 
@@ -549,8 +531,6 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("ProductId");
 
                     b.HasIndex("StockInVoucherId");
-
-                    b.HasIndex("StockInVoucherId1");
 
                     b.HasIndex("SupplierId");
 
@@ -614,12 +594,6 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("StockOutVoucherId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StockOutVoucherId1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StockOutVoucherId2")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Tax")
                         .HasColumnType("decimal(65,30)");
 
@@ -637,8 +611,6 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("ProductId");
 
                     b.HasIndex("StockOutVoucherId");
-
-                    b.HasIndex("StockOutVoucherId1");
 
                     b.HasIndex("WarehouseId");
 
@@ -695,9 +667,6 @@ namespace InventoryAPI.Migrations
                     b.Property<int>("StockTransferId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StockTransferId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -710,8 +679,6 @@ namespace InventoryAPI.Migrations
                     b.HasIndex("ProductId");
 
                     b.HasIndex("StockTransferId");
-
-                    b.HasIndex("StockTransferId1");
 
                     b.HasIndex("WarehouseId");
 
@@ -802,30 +769,22 @@ namespace InventoryAPI.Migrations
 
             modelBuilder.Entity("InventoryAPI.Models.FinalProductComponent", b =>
                 {
-                    b.HasOne("InventoryAPI.Models.FinalProduct", null)
+                    b.HasOne("InventoryAPI.Models.FinalProduct", "FinalProduct")
                         .WithMany("Components")
                         .HasForeignKey("FinalProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("InventoryAPI.Models.FinalProduct", "FinalProduct")
-                        .WithMany()
-                        .HasForeignKey("FinalProductId1");
 
                     b.Navigation("FinalProduct");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.IndirectCost", b =>
                 {
-                    b.HasOne("InventoryAPI.Models.FinalProduct", null)
+                    b.HasOne("InventoryAPI.Models.FinalProduct", "FinalProduct")
                         .WithMany("IndirectCosts")
                         .HasForeignKey("FinalProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("InventoryAPI.Models.FinalProduct", "FinalProduct")
-                        .WithMany()
-                        .HasForeignKey("FinalProductId1");
 
                     b.Navigation("FinalProduct");
                 });
@@ -845,9 +804,7 @@ namespace InventoryAPI.Migrations
                 {
                     b.HasOne("InventoryAPI.Models.OperationOrders", null)
                         .WithMany("Items")
-                        .HasForeignKey("OperationOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OperationOrdersId");
                 });
 
             modelBuilder.Entity("InventoryAPI.Models.Product", b =>
@@ -912,15 +869,11 @@ namespace InventoryAPI.Migrations
 
             modelBuilder.Entity("InventoryAPI.Models.SalesOrderItem", b =>
                 {
-                    b.HasOne("InventoryAPI.Models.SalesOrder", null)
+                    b.HasOne("InventoryAPI.Models.SalesOrder", "SalesOrder")
                         .WithMany("Items")
                         .HasForeignKey("SalesOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("InventoryAPI.Models.SalesOrder", "SalesOrder")
-                        .WithMany()
-                        .HasForeignKey("SalesOrderId1");
 
                     b.Navigation("SalesOrder");
                 });
@@ -937,29 +890,25 @@ namespace InventoryAPI.Migrations
                     b.HasOne("InventoryAPI.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("InventoryAPI.Models.StockInVoucher", null)
+                    b.HasOne("InventoryAPI.Models.StockInVoucher", "StockInVoucher")
                         .WithMany("Items")
                         .HasForeignKey("StockInVoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryAPI.Models.StockInVoucher", "StockInVoucher")
-                        .WithMany()
-                        .HasForeignKey("StockInVoucherId1");
-
                     b.HasOne("InventoryAPI.Models.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("InventoryAPI.Models.Warehouse", "Warehouse")
                         .WithMany()
                         .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -996,15 +945,11 @@ namespace InventoryAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryAPI.Models.StockOutVoucher", null)
+                    b.HasOne("InventoryAPI.Models.StockOutVoucher", "StockOutVoucher")
                         .WithMany("Items")
                         .HasForeignKey("StockOutVoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("InventoryAPI.Models.StockOutVoucher", "StockOutVoucher")
-                        .WithMany()
-                        .HasForeignKey("StockOutVoucherId1");
 
                     b.HasOne("InventoryAPI.Models.Warehouse", "Warehouse")
                         .WithMany()
@@ -1029,15 +974,11 @@ namespace InventoryAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryAPI.Models.StockTransfer", null)
+                    b.HasOne("InventoryAPI.Models.StockTransfer", "StockTransfer")
                         .WithMany("Items")
                         .HasForeignKey("StockTransferId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("InventoryAPI.Models.StockTransfer", "StockTransfer")
-                        .WithMany()
-                        .HasForeignKey("StockTransferId1");
 
                     b.HasOne("InventoryAPI.Models.Warehouse", "Warehouse")
                         .WithMany()

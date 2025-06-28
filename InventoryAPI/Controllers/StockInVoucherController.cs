@@ -64,13 +64,10 @@ namespace InventoryAPI.Controllers
                     i.Price,
                     i.Tax,
                     i.Discount,
-                    i.ColorCode,       // عرض كود اللون
-<<<<<<< HEAD:InventoryAPI/Controllers/StockInVoucherController.cs
-                    i.TotalCost
-=======
+                    i.ColorCode,       
                     i.TotalCost,
                     i.Unit
->>>>>>> fe47b9e (fix: update components):Controllers/StockInVoucherController.cs
+
                 })
             });
 
@@ -195,12 +192,11 @@ namespace InventoryAPI.Controllers
                     i.Tax,
                     i.Discount,
                     i.ColorCode,  // عرض كود اللون
-<<<<<<< HEAD:InventoryAPI/Controllers/StockInVoucherController.cs
-                    i.TotalCost
-=======
+
                     i.TotalCost,
+
+            
                     i.Unit
->>>>>>> fe47b9e (fix: update components):Controllers/StockInVoucherController.cs
                 })
             };
 

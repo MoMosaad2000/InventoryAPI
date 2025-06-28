@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InventoryAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class vv12345678910111213456789123456 : Migration
+    public partial class InitialClean : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -252,8 +252,7 @@ namespace InventoryAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UnitId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<double>(type: "double", nullable: false),
-                    Price = table.Column<double>(type: "double", nullable: false),
-                    FinalProductId1 = table.Column<int>(type: "int", nullable: true)
+                    Price = table.Column<double>(type: "double", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -264,11 +263,6 @@ namespace InventoryAPI.Migrations
                         principalTable: "FinalProducts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FinalProductComponents_FinalProducts_FinalProductId1",
-                        column: x => x.FinalProductId1,
-                        principalTable: "FinalProducts",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -287,8 +281,7 @@ namespace InventoryAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UnitCost = table.Column<double>(type: "double", nullable: false),
                     MainClassification = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    FinalProductId1 = table.Column<int>(type: "int", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -299,16 +292,11 @@ namespace InventoryAPI.Migrations
                         principalTable: "FinalProducts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_IndirectCosts_FinalProducts_FinalProductId1",
-                        column: x => x.FinalProductId1,
-                        principalTable: "FinalProducts",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "OperationOrderItems",
+                name: "OperationOrderItem",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -321,17 +309,17 @@ namespace InventoryAPI.Migrations
                     Unit = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    ProductionDurationHours = table.Column<double>(type: "double", nullable: false)
+                    ProductionDurationHours = table.Column<double>(type: "double", nullable: false),
+                    OperationOrdersId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OperationOrderItems", x => x.Id);
+                    table.PrimaryKey("PK_OperationOrderItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OperationOrderItems_OperationOrders_OperationOrderId",
-                        column: x => x.OperationOrderId,
+                        name: "FK_OperationOrderItem_OperationOrders_OperationOrdersId",
+                        column: x => x.OperationOrdersId,
                         principalTable: "OperationOrders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -430,7 +418,6 @@ namespace InventoryAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     SalesOrderId = table.Column<int>(type: "int", nullable: false),
-                    SalesOrderId1 = table.Column<int>(type: "int", nullable: true),
                     Notes = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OrderName = table.Column<string>(type: "longtext", nullable: false)
@@ -455,11 +442,6 @@ namespace InventoryAPI.Migrations
                         principalTable: "SalesOrder",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SalesOrderItem_SalesOrder_SalesOrderId1",
-                        column: x => x.SalesOrderId1,
-                        principalTable: "SalesOrder",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -527,7 +509,6 @@ namespace InventoryAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     StockInVoucherId = table.Column<int>(type: "int", nullable: false),
-                    StockInVoucherId1 = table.Column<int>(type: "int", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     SupplierId = table.Column<int>(type: "int", nullable: false),
                     WarehouseId = table.Column<int>(type: "int", nullable: false),
@@ -538,8 +519,7 @@ namespace InventoryAPI.Migrations
                     Tax = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     Discount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     ColorCode = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    StockInVoucherId2 = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -549,7 +529,7 @@ namespace InventoryAPI.Migrations
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_StockInVoucherItems_StockInVouchers_StockInVoucherId",
                         column: x => x.StockInVoucherId,
@@ -557,22 +537,17 @@ namespace InventoryAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StockInVoucherItems_StockInVouchers_StockInVoucherId1",
-                        column: x => x.StockInVoucherId1,
-                        principalTable: "StockInVouchers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_StockInVoucherItems_Suppliers_SupplierId",
                         column: x => x.SupplierId,
                         principalTable: "Suppliers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_StockInVoucherItems_Warehouses_WarehouseId",
                         column: x => x.WarehouseId,
                         principalTable: "Warehouses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -583,7 +558,6 @@ namespace InventoryAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     StockOutVoucherId = table.Column<int>(type: "int", nullable: false),
-                    StockOutVoucherId1 = table.Column<int>(type: "int", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     WarehouseId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
@@ -594,8 +568,7 @@ namespace InventoryAPI.Migrations
                     Tax = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     Discount = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
                     ColorCode = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    StockOutVoucherId2 = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -619,11 +592,6 @@ namespace InventoryAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StockOutVoucherItems_StockOutVouchers_StockOutVoucherId1",
-                        column: x => x.StockOutVoucherId1,
-                        principalTable: "StockOutVouchers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_StockOutVoucherItems_Warehouses_WarehouseId",
                         column: x => x.WarehouseId,
                         principalTable: "Warehouses",
@@ -639,7 +607,6 @@ namespace InventoryAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     StockTransferId = table.Column<int>(type: "int", nullable: false),
-                    StockTransferId1 = table.Column<int>(type: "int", nullable: true),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     WarehouseId = table.Column<int>(type: "int", nullable: false),
                     Unit = table.Column<string>(type: "longtext", nullable: false)
@@ -664,11 +631,6 @@ namespace InventoryAPI.Migrations
                         principalTable: "StockTransfers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_StockTransferItems_StockTransfers_StockTransferId1",
-                        column: x => x.StockTransferId1,
-                        principalTable: "StockTransfers",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_StockTransferItems_Warehouses_WarehouseId",
                         column: x => x.WarehouseId,
@@ -712,19 +674,9 @@ namespace InventoryAPI.Migrations
                 column: "FinalProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FinalProductComponents_FinalProductId1",
-                table: "FinalProductComponents",
-                column: "FinalProductId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_IndirectCosts_FinalProductId",
                 table: "IndirectCosts",
                 column: "FinalProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IndirectCosts_FinalProductId1",
-                table: "IndirectCosts",
-                column: "FinalProductId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvoiceAttachments_PurchaseInvoiceId",
@@ -732,9 +684,9 @@ namespace InventoryAPI.Migrations
                 column: "PurchaseInvoiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OperationOrderItems_OperationOrderId",
-                table: "OperationOrderItems",
-                column: "OperationOrderId");
+                name: "IX_OperationOrderItem_OperationOrdersId",
+                table: "OperationOrderItem",
+                column: "OperationOrdersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_SubCategoryId",
@@ -772,11 +724,6 @@ namespace InventoryAPI.Migrations
                 column: "SalesOrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SalesOrderItem_SalesOrderId1",
-                table: "SalesOrderItem",
-                column: "SalesOrderId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StockInVoucherItems_ProductId",
                 table: "StockInVoucherItems",
                 column: "ProductId");
@@ -785,11 +732,6 @@ namespace InventoryAPI.Migrations
                 name: "IX_StockInVoucherItems_StockInVoucherId",
                 table: "StockInVoucherItems",
                 column: "StockInVoucherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StockInVoucherItems_StockInVoucherId1",
-                table: "StockInVoucherItems",
-                column: "StockInVoucherId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StockInVoucherItems_SupplierId",
@@ -822,11 +764,6 @@ namespace InventoryAPI.Migrations
                 column: "StockOutVoucherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StockOutVoucherItems_StockOutVoucherId1",
-                table: "StockOutVoucherItems",
-                column: "StockOutVoucherId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StockOutVoucherItems_WarehouseId",
                 table: "StockOutVoucherItems",
                 column: "WarehouseId");
@@ -845,11 +782,6 @@ namespace InventoryAPI.Migrations
                 name: "IX_StockTransferItems_StockTransferId",
                 table: "StockTransferItems",
                 column: "StockTransferId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StockTransferItems_StockTransferId1",
-                table: "StockTransferItems",
-                column: "StockTransferId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StockTransferItems_WarehouseId",
@@ -885,7 +817,7 @@ namespace InventoryAPI.Migrations
                 name: "InvoiceAttachments");
 
             migrationBuilder.DropTable(
-                name: "OperationOrderItems");
+                name: "OperationOrderItem");
 
             migrationBuilder.DropTable(
                 name: "PurchaseInvoiceItems");

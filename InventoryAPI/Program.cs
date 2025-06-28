@@ -6,11 +6,8 @@ using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-<<<<<<< HEAD:InventoryAPI/Program.cs
-=======
 
 // ✅ إعداد البورت
->>>>>>> fe47b9e (fix: update components):Program.cs
 var port = Environment.GetEnvironmentVariable("port") ?? "8080";
 builder.WebHost.UseUrls($"https://*:{port}");
 
@@ -79,12 +76,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-<<<<<<< HEAD:InventoryAPI/Program.cs
-// 🔹 تفعيل Swagger فقط في بيئة التطوير
-app.UseHealthChecks("/health");
-=======
 // ✅ Swagger UI
->>>>>>> fe47b9e (fix: update components):Program.cs
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -95,13 +87,13 @@ app.UseSwaggerUI(c =>
 // ✅ Middlewares
 app.UseHealthChecks("/health");
 app.UseStaticFiles();
+
 // 🛠 تأكد أن مجلد uploads موجود فعليًا
 var uploadsPath = Path.Combine(app.Environment.WebRootPath, "uploads");
 if (!Directory.Exists(uploadsPath))
 {
     Directory.CreateDirectory(uploadsPath);
 }
-
 
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
