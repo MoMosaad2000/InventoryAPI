@@ -1,0 +1,454 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>InventoryAPI</name>
+    </assembly>
+    <members>
+        <member name="T:InventoryAPI.Migrations.InitialClean">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean2">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean2.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean2.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean2.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean12">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean12.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean12.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean12.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean3">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean3.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean3.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean3.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean4">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean4.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean4.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean4.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean5">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean5.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean5.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean5.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean6">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean6.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean6.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean6.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean7">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean7.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean7.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean7.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean9">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean9.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean9.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean9.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean10">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean10.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean10.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean10.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean11">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean11.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean11.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean11.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean13">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean13.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean13.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean13.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean14">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean14.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean14.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean14.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean15">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean15.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean15.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean15.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean16">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean16.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean16.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean16.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean17">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean17.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean17.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean17.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean18">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean18.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean18.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean18.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean19">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean19.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean19.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean19.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean20">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean20.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean20.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean20.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean21">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean21.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean21.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean21.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.InitialClean22">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean22.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean22.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.InitialClean22.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt1">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt1.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt1.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt1.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt2">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt2.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt2.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt2.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt4">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt4.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt4.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt4.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt5">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt5.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt5.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt5.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt6">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt6.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt6.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt6.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt7">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt7.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt7.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt7.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt8">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt8.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt8.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt8.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt9">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt9.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt9.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt9.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt10">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt10.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt10.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt10.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt11">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt11.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt11.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt11.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt12">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt12.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt12.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt12.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt13">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt13.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt13.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt13.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt14">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt14.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt14.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt14.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:InventoryAPI.Migrations.AddQuotationUpdatedAt15">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt15.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt15.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:InventoryAPI.Migrations.AddQuotationUpdatedAt15.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="P:InventoryAPI.Models.MaterialIssueCreateDto.RequesterSignatureBase64">
+            <summary>
+            ممكن تبعتها DataURL أو base64 خام.
+            في الـ UPDATE لو بعتها "" => يمسح التوقيع
+            لو null => ما يغيرش التوقيع
+            </summary>
+        </member>
+        <member name="P:InventoryAPI.Models.MaterialIssueCreateDto.StoreKeeperSignatureBase64">
+            <summary>
+            ممكن تبعتها DataURL أو base64 خام.
+            في الـ UPDATE لو بعتها "" => يمسح التوقيع
+            لو null => ما يغيرش التوقيع
+            </summary>
+        </member>
+    </members>
+</doc>
